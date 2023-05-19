@@ -5,9 +5,20 @@ const port = 3000
 const app = express()
 app.disable('etag') // 304
 
-app.get('/', (request, response) => {
+const genralMiddleware = (req, res, next) => {
+  console.log('query', req.query)
+  next()
+}
+
+const middleware = (req, res, next) => {
+  console.log('middleware')
+  next()
+}
+app.use(genralMiddleware)
+
+app.get('/', middleware, (request, response) => {
   response.status(200)
-  response.json({ test: 'tests' })
+  response.json({ routes: ['/', { '/route': '/:id' }] })
 })
 
 app.listen(port, () => {
