@@ -1,27 +1,29 @@
 import express from 'express'
+import { WebSocketServer } from 'ws'
+import http from 'http'
 import usernames from './routes/api/usernames.mjs'
 import members from './routes/api/members.mjs'
-import genralMiddleware from './midleware/general.mjs'
+import generalMiddleware from './midleware/general.mjs'
+import middleware from './midleware/middleware.mjs'
 
-const port = 3000
-const app = express()
-app.disable('etag') // 304
+import socketHandler from './websocket/socket.mjs'
 
-const middleware = (req, res, next) => {
-  console.log('middleware')
-  next()
-}
-app.use(genralMiddleware)
+const appPort = 3000
+const socketPort = 3001
 
-app.get('/', middleware, (request, response) => {
-  response.status(200)
-  response.send(
-    '<ul style="font-size: 1.5rem"><li><a href="/api/members">api/members</a></li><li><a href="/api/usernames">api/usernames</a></li><li><a href="/index.html">index.html</a></li></ul>'
-  )
+const app = express().disable('etag')
+const socketServer = http.createServer(app)
+const socket = new WebSocketServer({ server: socketServer })
+
+app.listen(appPort, () => {
+  console.log(`listening on port ${appPort}`)
 })
+socketServer.listen(socketPort)
+
+app.use(generalMiddleware)
+app.get('/', middleware, () => console.log('client -> app'))
+socket.on('connection', socketHandler)
 app.use(express.static('public'))
 app.use('/api', usernames, members)
 
-app.listen(port, () => {
-  console.log(`listening on port ${port}`)
-})
+export default app
