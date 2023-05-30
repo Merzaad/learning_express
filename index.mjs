@@ -3,26 +3,23 @@ import { WebSocketServer } from 'ws'
 import http from 'http'
 import usernames from './routes/api/usernames.mjs'
 import members from './routes/api/members.mjs'
-import generalMiddleware from './midleware/general.mjs'
-import middleware from './midleware/middleware.mjs'
+import generalMiddleware from './midlewares/generalMiddleware.mjs'
+import middleware from './midlewares/middleware.mjs'
 
-import socketHandler from './websocket/socket.mjs'
+import connectionListener from './websocket/connectionListener.mjs'
 
-const appPort = 3000
-const socketPort = 3001
+const port = 3000
 
 const app = express().disable('etag')
-const socketServer = http.createServer(app)
-const socket = new WebSocketServer({ server: socketServer })
+const server = http.createServer(app)
+const socket = new WebSocketServer({ server })
 
-app.listen(appPort, () => {
-  console.log(`listening on port ${appPort}`)
-})
-socketServer.listen(socketPort)
+server.listen(port, () => console.log(`listening on ${port}`))
+
+socket.on('connection', connectionListener)
 
 app.use(generalMiddleware)
-app.get('/', middleware, () => console.log('client -> app'))
-socket.on('connection', socketHandler)
+app.get('/', middleware, () => console.log('/'))
 app.use(express.static('public'))
 app.use('/api', usernames, members)
 

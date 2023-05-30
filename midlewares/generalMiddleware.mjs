@@ -1,5 +1,5 @@
 const generalMiddleware = (req, res, next) => {
-  console.log('query', req.query)
+  console.log('general middleware')
   next()
 }
 
