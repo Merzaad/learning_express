@@ -1,10 +1,9 @@
 import express from 'express'
 import { WebSocketServer } from 'ws'
 import http from 'http'
-import usernames from './routes/api/usernames.mjs'
-import members from './routes/api/members.mjs'
 import generalMiddleware from './midlewares/generalMiddleware.mjs'
 import middleware from './midlewares/middleware.mjs'
+import api from './routes/api/api.mjs'
 
 import connectionListener from './websocket/connectionListener.mjs'
 import compression from 'compression'
@@ -23,6 +22,6 @@ app.use(compression())
 app.use(generalMiddleware)
 app.get('/', middleware, () => console.log('/'))
 app.use(express.static('public'))
-app.use('/api', usernames, members)
+app.use('/api', api)
 
 export default app
