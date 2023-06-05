@@ -1,8 +1,21 @@
 const connectionListener = (ws) => {
-  console.log('socket connected')
-
+  const test = { a: 1, b: 2 }
+  let timeOut = null
   ws.on('message', (message) => {
-    console.log(JSON.parse(message))
+    if (String(message) === 'ping') {
+      ws.send('pong')
+      timeOut = setTimeout(() => {
+        test.a += 1
+        test.b += 1
+        ws.send(JSON.stringify(test))
+        console.log('test')
+      }, 2000)
+    } else {
+      ws.send('connection closed')
+      clearTimeout(timeOut)
+      ws.terminate()
+    }
   })
 }
+// todo: clear timeout and intervals and ping pong best practice
 export default connectionListener
