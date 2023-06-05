@@ -17,5 +17,4 @@ const connectionListener = (ws) => {
     }
   })
 }
-// todo: clear timeout and intervals and ping pong best practice
 export default connectionListener

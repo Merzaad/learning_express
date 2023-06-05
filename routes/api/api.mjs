@@ -1,11 +1,11 @@
 import express from 'express'
-import members from './members.mjs'
-import usernames from './usernames.mjs'
+import fetchWithKey from './fetchWithKey.mjs'
+
 const api = express.Router()
 
 api.get('/', (req, res) => {
   res.send('api')
 })
 
-api.use(members, usernames)
+api.use('/fetchWithKey', fetchWithKey)
 export default api
