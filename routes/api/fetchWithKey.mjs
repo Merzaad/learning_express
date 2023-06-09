@@ -1,5 +1,5 @@
 import express from 'express'
-import getData from '../../redis/getData.mjs'
+import { getData, setData } from '../../redis/index.mjs'
 
 const fetchWithKey = express.Router()
 
@@ -13,13 +13,20 @@ fetchWithKey
     const { key } = req.params
     getData(key)
       .then((result) => res.json({ [key]: result }))
-      .catch((error) => {
-        console.error(error.message)
-        res.sendStatus(400)
+      .catch(({ message }) => {
+        res.status(400).json({ message })
       })
   })
-  .post((req) => {
-    // todo
+  .post((req, res) => {
+    const {
+      body: { value },
+      params: { key },
+    } = req
+    setData(key, value)
+      .then(() => res.status(200).end())
+      .catch(({ message }) => {
+        res.status(400).json({ message })
+      })
   })
 
 fetchWithKey.param('key', (req, res, next, key) => {

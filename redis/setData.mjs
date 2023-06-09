@@ -1,15 +1,14 @@
-import { createClient } from 'redis'
+import { client } from './index.mjs'
 
 const setData = async (key, value) => {
   try {
-    const client = createClient({
-      url: 'redis://localhost:6379',
-    })
     await client.connect()
     await client.set(key, value)
-    await client.disconnect()
   } catch (error) {
-    throw new Error(error)
+    console.log(error)
+    throw new Error('post error')
+  } finally {
+    await client.disconnect()
   }
 }
 export default setData
