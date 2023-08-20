@@ -8,13 +8,16 @@ const connectionListener = (ws) => {
         test.a += 1
         test.b += 1
         ws.send(JSON.stringify(test))
-        console.log('test')
+        console.log('timeout fired')
       }, 2000)
     } else {
       ws.send('connection closed')
       clearTimeout(timeOut)
       ws.terminate()
     }
+  })
+  ws.on('open', () => {
+    console.log('test')
   })
 }
 export default connectionListener
