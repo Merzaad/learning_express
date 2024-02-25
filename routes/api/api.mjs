@@ -1,5 +1,7 @@
 import express from "express";
-import fetchWithKey from "./fetchWithKey.mjs";
+import getDataWithParam from "./getDataWithParam.mjs";
+import postData from "./postData.mjs";
+import getData from "./getData.mjs";
 
 const api = express.Router();
 
@@ -8,5 +10,8 @@ api.get("/", (req, res) => {
   res.send("api");
 });
 
-api.use("/fetchWithKey", fetchWithKey);
+api.use("/getDataWithParam", getDataWithParam);
+api.use("/postData", postData);
+api.use("/getData", getData);
+
 export default api;
