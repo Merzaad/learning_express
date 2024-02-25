@@ -1,14 +1,13 @@
 import { client } from "./index.mjs";
 
-const set = async (key, value) => {
+const post = async (key, value) => {
   try {
     await client.connect();
     await client.set(key, value);
   } catch (error) {
-    console.log(error);
-    throw new Error("post error");
+    throw new Error(error);
   } finally {
     await client.disconnect();
   }
 };
-export default set;
+export default post;

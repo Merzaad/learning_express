@@ -1,5 +1,5 @@
 import express from "express";
-import { get, set } from "../../redis/index.mjs";
+import { getRedis } from "../../redis/index.mjs";
 
 const getDataWithParam = express.Router();
 
@@ -9,7 +9,7 @@ getDataWithParam.get("/", (req, res) => {
 
 getDataWithParam.route("/:key").get((req, res) => {
   const { key } = req.params;
-  getData(key)
+  getRedis(key)
     .then((result) => res.json({ [key]: result }))
     .catch(({ message }) => {
       res.status(400).json({ message });

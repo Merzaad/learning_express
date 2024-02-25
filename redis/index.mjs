@@ -1,10 +1,10 @@
 import { createClient } from "redis";
 
-import get from "./get.mjs";
-import set from "./set.mjs";
+import getRedis from "./get.mjs";
+import postRedis from "./post.mjs";
 
 const client = createClient({
   url: "redis://localhost:6379",
 });
 
-export { client, set, get };
+export { client, postRedis, getRedis };
